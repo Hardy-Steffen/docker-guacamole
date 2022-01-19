@@ -1,7 +1,7 @@
 FROM library/tomcat:9-jre11
 
 ENV ARCH=amd64 \
-  GUAC_VER=1.3.0 \
+  GUAC_VER=1.4.0 \
   GUACAMOLE_HOME=/app/guacamole \
   PG_MAJOR=9.6 \
   PGDATA=/config/postgres \
@@ -10,7 +10,7 @@ ENV ARCH=amd64 \
 
 # Apply the s6-overlay
 
-RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v1.20.0.0/s6-overlay-${ARCH}.tar.gz" \
+RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-${ARCH}.tar.gz" \
   && tar -xzf s6-overlay-${ARCH}.tar.gz -C / \
   && tar -xzf s6-overlay-${ARCH}.tar.gz -C /usr ./bin \
   && rm -rf s6-overlay-${ARCH}.tar.gz \
