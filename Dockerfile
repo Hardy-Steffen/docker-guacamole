@@ -35,36 +35,36 @@ RUN [ "$ARCH" = "armhf" ] && ln -s /usr/local/lib/freerdp /usr/lib/arm-linux-gnu
 RUN [ "$ARCH" = "amd64" ] && ln -s /usr/local/lib/freerdp /usr/lib/x86_64-linux-gnu/freerdp || exit 0
 
 # Install guacamole-server
-RUN curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" \
-  && tar -xzf guacamole-server-${GUAC_VER}.tar.gz \
-  && cd guacamole-server-${GUAC_VER} \
+RUN curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/source/guacamole-server-1.4.0.tar.gz" \
+  && tar -xzf guacamole-server-1.4.0.tar.gz \
+  && cd guacamole-server-1.4.0 \
   && ./configure --enable-allow-freerdp-snapshots \
   && make -j$(getconf _NPROCESSORS_ONLN) \
   && make install \
   && cd .. \
-  && rm -rf guacamole-server-${GUAC_VER}.tar.gz guacamole-server-${GUAC_VER} \
+  && rm -rf guacamole-server-1.4.0.tar.gz guacamole-server-1.4.0 \
   && ldconfig
 
 # Install guacamole-client and postgres auth adapter
 RUN set -x \
   && rm -rf ${CATALINA_HOME}/webapps/ROOT \
-  && curl -SLo ${CATALINA_HOME}/webapps/ROOT.war "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${GUAC_VER}.war" \
+  && curl -SLo ${CATALINA_HOME}/webapps/ROOT.war "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/binary/guacamole-1.4.0.war" \
   && curl -SLo ${GUACAMOLE_HOME}/lib/postgresql-42.1.4.jar "https://jdbc.postgresql.org/download/postgresql-42.1.4.jar" \
-  && curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-auth-jdbc-${GUAC_VER}.tar.gz" \
-  && tar -xzf guacamole-auth-jdbc-${GUAC_VER}.tar.gz \
-  && cp -R guacamole-auth-jdbc-${GUAC_VER}/postgresql/guacamole-auth-jdbc-postgresql-${GUAC_VER}.jar ${GUACAMOLE_HOME}/extensions/ \
-  && cp -R guacamole-auth-jdbc-${GUAC_VER}/postgresql/schema ${GUACAMOLE_HOME}/ \
-  && rm -rf guacamole-auth-jdbc-${GUAC_VER} guacamole-auth-jdbc-${GUAC_VER}.tar.gz
+  && curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/binary/guacamole-auth-jdbc-1.4.0.tar.gz" \
+  && tar -xzf guacamole-auth-jdbc-1.4.0.tar.gz \
+  && cp -R guacamole-auth-jdbc-1.4.0/postgresql/guacamole-auth-jdbc-postgresql-1.4.0.jar ${GUACAMOLE_HOME}/extensions/ \
+  && cp -R guacamole-auth-jdbc-1.4.0/postgresql/schema ${GUACAMOLE_HOME}/ \
+  && rm -rf guacamole-auth-jdbc-1.4.0 guacamole-auth-jdbc-1.4.0.tar.gz
 
 # Add optional extensions
 RUN set -xe \
   && mkdir ${GUACAMOLE_HOME}/extensions-available \
   && for i in auth-ldap auth-duo auth-header auth-cas auth-openid auth-quickconnect auth-totp; do \
-    echo "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${i}-${GUAC_VER}.tar.gz" \
-    && curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${i}-${GUAC_VER}.tar.gz" \
-    && tar -xzf guacamole-${i}-${GUAC_VER}.tar.gz \
-    && cp guacamole-${i}-${GUAC_VER}/guacamole-${i}-${GUAC_VER}.jar ${GUACAMOLE_HOME}/extensions-available/ \
-    && rm -rf guacamole-${i}-${GUAC_VER} guacamole-${i}-${GUAC_VER}.tar.gz \
+    echo "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/binary/guacamole-${i}-1.4.0.tar.gz" \
+    && curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/1.4.0/binary/guacamole-${i}-1.4.0.tar.gz" \
+    && tar -xzf guacamole-${i}-1.4.0.tar.gz \
+    && cp guacamole-${i}-1.4.0/guacamole-${i}-1.4.0.jar ${GUACAMOLE_HOME}/extensions-available/ \
+    && rm -rf guacamole-${i}-1.4.0 guacamole-${i}-1.4.0.tar.gz \
   ;done
 
 ENV PATH=/usr/lib/postgresql/${PG_MAJOR}/bin:$PATH
