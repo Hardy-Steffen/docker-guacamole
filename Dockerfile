@@ -10,9 +10,9 @@ ENV ARCH=amd64 \
 
 # Apply the s6-overlay
 
-RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-${ARCH}.tar.gz" \
-  && tar -xzf s6-overlay-${ARCH}.tar.gz -C / \
-  && tar -xzf s6-overlay-${ARCH}.tar.gz -C /usr ./bin \
+RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v3.0.0.2/s6-overlay-x86_64-3.0.0.2.tar.xz" \
+  && tar -xzf s6-overlay-${ARCH}.tar.xz -C / \
+  && tar -xzf s6-overlay-${ARCH}.tar.xz -C /usr ./bin \
   && rm -rf s6-overlay-${ARCH}.tar.gz \
   && mkdir -p ${GUACAMOLE_HOME} \
     ${GUACAMOLE_HOME}/lib \
